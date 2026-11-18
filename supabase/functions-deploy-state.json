@@ -1,0 +1,9 @@
+{
+  "projectId": "72988093",
+  "functions": {
+    "delete-account": {
+      "hasChanged": false,
+      "hash": "1bb9fc390e6b5b0bd2c0f013508429eb83ca3593a4c97308320066baf585b0a5"
+    }
+  }
+}

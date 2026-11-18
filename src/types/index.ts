@@ -11,6 +11,11 @@ export interface SkinProfile {
   sensitivity: Sensitivity | null;
   preferences: string[] | null;
   date_of_birth: string | null;
+  food_preference: 'vegetarian' | 'non-vegetarian' | null;
+  language: string;
+  avatar_path: string | null;
+  age_range: string | null;
+  privacy_settings: Record<string, boolean> | null;
 }
 
 export interface SkinAnalysis {
@@ -41,9 +46,72 @@ export interface ChatMessage {
   created_at: string;
 }
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  fullName: string;
-  createdAt: string;
+export type AnalysisRegion = 'forehead' | 'left_cheek' | 'right_cheek' | 'nose' | 'chin';
+
+export interface AnalysisRegionResult {
+  region: AnalysisRegion;
+  findings: string | null;
+  severity: AcneSeverity | null;
+  confidence: number | null;
+  spots: number | null;
 }
+
+export interface EnhancementRecord {
+  id: string;
+  original_path: string;
+  enhanced_path: string | null;
+  status: 'pending' | 'complete' | 'failed';
+  created_at: string;
+}
+
+export interface RoutineStep {
+  name: string;
+  detail: string;
+}
+
+export interface Routine {
+  id: string;
+  period: 'morning' | 'night';
+  steps: RoutineStep[];
+  source: 'default' | 'personalized' | 'custom';
+  active: boolean;
+}
+
+export interface RoutineCompletion {
+  routine_id: string;
+  step_index: number;
+  day: string;
+  done: boolean;
+}
+
+export interface BeautyTip {
+  id: string;
+  category: string;
+  title: string;
+  body: string;
+  ingredients: string[] | null;
+}
+
+export interface DietPlan {
+  id: string;
+  preference: 'vegetarian' | 'non-vegetarian';
+  day_label: string | null;
+  plan: Record<string, string[]>;
+  created_at: string;
+}
+
+export interface NotificationItem {
+  id: string;
+  type: 'morning_reminder' | 'night_reminder' | 'water_reminder' | 'meal_reminder' | 'general_reminder';
+  title: string;
+  body: string | null;
+  read: boolean;
+  created_at: string;
+}
+
+export interface NotificationPreference {
+  type: NotificationItem['type'];
+  enabled: boolean;
+  preferred_time: string;
+}
+
