@@ -16,6 +16,10 @@ import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/services/supabase';
+import { isAnalysisModelConfigured } from '@/services/config';
+import { runAnalysis } from '@/services/analysisService';
+import { listAnalysisRegions } from '@/services/api';
+import RegionMap from '@/components/analysis/RegionMap';
 import {
   uploadFaceImage,
   createAnalysis,
@@ -23,7 +27,7 @@ import {
   getSignedImageUrl,
   deleteAnalysis,
 } from '@/services/api';
-import type { SkinAnalysis } from '@/types';
+import type { SkinAnalysis, AnalysisRegionResult } from '@/types';
 import { formatDate, severityLabels } from '@/lib/utils';
 
 const PROGRESS_STEPS = [
@@ -47,6 +51,7 @@ export default function AnalysisPage() {
   const [submitError, setSubmitError] = useState('');
   const [submitted, setSubmitted] = useState<SkinAnalysis | null>(null);
   const [review, setReview] = useState<SkinAnalysis | null>(null);
+  const [reviewRegions, setReviewRegions] = useState<AnalysisRegionResult[]>([]);
   const [reviewUrl, setReviewUrl] = useState<string | null>(null);
   const [reviewLoading, setReviewLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -60,8 +65,12 @@ export default function AnalysisPage() {
         const a = await getAnalysis(id);
         if (a) {
           setReview(a);
-          const url = await getSignedImageUrl(a.image_path);
+          const [url, regions] = await Promise.all([
+            getSignedImageUrl(a.image_path),
+            listAnalysisRegions(id).catch(() => []),
+          ]);
           setReviewUrl(url);
+          setReviewRegions(regions);
         }
       } catch {
         setReview(null);
@@ -165,10 +174,12 @@ export default function AnalysisPage() {
     }, 220);
     try {
       const path = await uploadFaceImage(user.id, file);
-      setProgress(70);
+      setProgress(55);
       const analysis = await createAnalysis(path);
+      setProgress(75);
+      const result = await runAnalysis(analysis.id, path, file);
       setProgress(100);
-      setSubmitted(analysis);
+      setSubmitted({ ...analysis, status: result.status });
     } catch (err) {
       setSubmitError(
         err instanceof Error
@@ -229,15 +240,39 @@ export default function AnalysisPage() {
           <Card className="p-10 text-center text-navy-400">This analysis could not be found.</Card>
         ) : (
           <div className="grid gap-6 lg:grid-cols-2">
-            <Card className="overflow-hidden">
-              {reviewUrl ? (
-                <img src={reviewUrl} alt="Analysed face" className="aspect-[4/5] w-full object-cover" />
-              ) : (
-                <div className="flex aspect-[4/5] items-center justify-center bg-mist text-navy-300">
-                  <ScanFace className="h-10 w-10" />
-                </div>
+            <div className="space-y-4">
+              <Card className="overflow-hidden">
+                <RegionMap imageUrl={reviewUrl} regions={reviewRegions} />
+              </Card>
+              {reviewRegions.length > 0 && (
+                <Card className="p-5">
+                  <h3 className="text-sm font-bold uppercase tracking-wide text-navy-400">
+                    Region-wise findings
+                  </h3>
+                  <ul className="mt-3 space-y-3">
+                    {reviewRegions.map((r) => (
+                      <li key={r.region} className="rounded-xl bg-mist p-3.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-sm font-semibold capitalize text-navy-700">
+                            {r.region.replace('_', ' ')}
+                          </p>
+                          {r.severity && (
+                            <span className="rounded-full bg-lavender-100 px-2.5 py-0.5 text-[11px] font-bold text-lavender-500">
+                              {severityLabels[r.severity]}
+                            </span>
+                          )}
+                        </div>
+                        {r.findings && <p className="mt-1 text-xs leading-relaxed text-navy-500">{r.findings}</p>}
+                        <div className="mt-1.5 flex gap-3 text-[11px] text-navy-400">
+                          {r.confidence != null && <span>Confidence: {Math.round(r.confidence * 100)}%</span>}
+                          {r.spots != null && <span>Spots detected: {r.spots}</span>}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
               )}
-            </Card>
+            </div>
             <Card className="p-6">
               {hasResults ? (
                 <div className="space-y-5">
@@ -295,10 +330,14 @@ export default function AnalysisPage() {
                   <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50">
                     <Info className="h-8 w-8 text-amber-500" />
                   </div>
-                  <h3 className="mt-4 font-semibold text-navy-700">Demo state — model not connected</h3>
+                  <h3 className="mt-4 font-semibold text-navy-700">
+                    {isAnalysisModelConfigured()
+                      ? 'Analysis pending — model did not return results'
+                      : 'Pending — AI model not connected'}
+                  </h3>
                   <p className="mt-2 max-w-sm text-sm leading-relaxed text-navy-500">
                     Your image was saved securely and the analysis request was recorded, but
-                    the AI model has not returned results yet. DermaLens only displays
+                    no model results have been returned yet. AcneClear only displays
                     outcomes produced by the real model — never fabricated predictions.
                   </p>
                   <Link to="/dashboard/routine" className="mt-6">
@@ -329,10 +368,12 @@ export default function AnalysisPage() {
       <Card className="flex items-start gap-3 border-amber-200 bg-amber-50 p-5">
         <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
         <p className="text-sm leading-relaxed text-amber-800">
-          <span className="font-semibold">Demo state:</span> the AI model is not connected
-          yet. You can submit your photo and it will be stored securely with a recorded
-          request — results appear automatically once the model goes live. DermaLens does
-          not diagnose medical conditions and never shows invented predictions.
+          <span className="font-semibold">
+            {isAnalysisModelConfigured() ? 'Model connected' : 'Demo state:'}
+          </span>{' '}
+          {isAnalysisModelConfigured()
+            ? 'Your photo will be sent to the connected AI model, which examines five facial regions — forehead, cheeks, nose and chin. If the model cannot be reached, the analysis stays pending rather than showing invented results.'
+            : 'the AI model is not connected yet. You can submit your photo and it will be stored securely with a recorded request — results appear automatically once the model goes live. AcneClear does not diagnose medical conditions and never shows invented predictions.'}
         </p>
       </Card>
 

@@ -20,28 +20,35 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem('dermalens-lang') as Language | null;
     if (saved && languages.some((l) => l.value === saved)) setLangState(saved);
     if (!user) return;
-    supabase
-      .from('profiles')
-      .select('language')
-      .eq('id', user.id)
-      .maybeSingle()
-      .then(({ data }) => {
+    const load = async () => {
+      try {
+        const { data } = await supabase
+          .from('profiles')
+          .select('language')
+          .eq('id', user.id)
+          .maybeSingle();
         if (data?.language && languages.some((l) => l.value === data.language)) {
           setLangState(data.language as Language);
         }
-      })
-      .catch(() => undefined);
+      } catch {
+        /* profile language unavailable */
+      }
+    };
+    load();
   }, [user]);
 
   const setLang = (l: Language) => {
     setLangState(l);
     localStorage.setItem('dermalens-lang', l);
     if (user) {
-      supabase
-        .from('profiles')
-        .upsert({ id: user.id, language: l })
-        .then(() => undefined)
-        .catch(() => undefined);
+      const persist = async () => {
+        try {
+          await supabase.from('profiles').upsert({ id: user.id, language: l });
+        } catch {
+          /* keep local language selection */
+        }
+      };
+      persist();
     }
   };
 

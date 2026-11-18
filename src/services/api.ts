@@ -1,5 +1,19 @@
 import { supabase } from './supabase';
-import type { SkinAnalysis, SkinProfile, ChecklistItem, ChatMessage } from '@/types';
+import type {
+  SkinAnalysis,
+  SkinProfile,
+  ChecklistItem,
+  ChatMessage,
+  AnalysisRegionResult,
+  EnhancementRecord,
+  Routine,
+  RoutineStep,
+  RoutineCompletion,
+  BeautyTip,
+  DietPlan,
+  NotificationItem,
+  NotificationPreference,
+} from '@/types';
 
 /* ------------------------------------------------------------------ */
 /*  Auth                                                              */
@@ -37,7 +51,7 @@ export async function signOut() {
 
 export async function getProfile(userId: string): Promise<SkinProfile | null> {
   const { data, error } = await supabase
-    .from('skin_profiles')
+    .from('profiles')
     .select('*')
     .eq('id', userId)
     .maybeSingle();
@@ -47,7 +61,7 @@ export async function getProfile(userId: string): Promise<SkinProfile | null> {
 
 export async function upsertProfile(profile: Partial<SkinProfile> & { id: string }) {
   const { data, error } = await supabase
-    .from('skin_profiles')
+    .from('profiles')
     .upsert(profile)
     .select()
     .single();
@@ -243,15 +257,8 @@ export async function listCompletions(day: string): Promise<RoutineCompletion[]>
 export async function setCompletion(routineId: string, stepIndex: number, day: string, done: boolean) {
   const { error } = await supabase
     .from('routine_completions')
-    .upsert({ routine_id: routineId, step_index: step_index(day), day, done }, { onConflict: 'routine_id,step_index,day' })
-    .select()
-    .single();
+    .upsert({ routine_id: routineId, step_index: stepIndex, day, done }, { onConflict: 'routine_id,step_index,day' });
   if (error) throw error;
-  void stepIndex;
-}
-
-function step_index(day: string) {
-  return 0 || Number(day.slice(-2)); // placeholder, replaced below
 }
 
 /* ------------------------------------------------------------------ */
