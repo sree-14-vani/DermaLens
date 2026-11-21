@@ -8,7 +8,7 @@ export default function Logo({ to = '/', dark = false }: { to?: string; dark?: b
         <Sparkles className="h-4.5 w-4.5" strokeWidth={2.2} />
       </span>
       <span className={`font-serif text-xl font-semibold tracking-tight ${dark ? 'text-white' : 'text-navy-700'}`}>
-        DermaLens
+        AcneLyze
       </span>
     </Link>
   );

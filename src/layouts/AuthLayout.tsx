@@ -25,7 +25,7 @@ export default function AuthLayout({
             <Sparkles className="h-4.5 w-4.5" strokeWidth={2.2} />
           </span>
           <span className="font-serif text-xl font-semibold tracking-tight text-navy-700">
-            DermaLens
+            AcneLyze
           </span>
         </Link>
         <div className="flex flex-1 items-center justify-center py-10">

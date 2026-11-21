@@ -7,7 +7,7 @@ const content: Record<string, { icon: typeof FileText; title: string; intro: str
     icon: ShieldCheck,
     title: 'Privacy Policy',
     intro:
-      'How DermaLens handles your personal information and facial photos.',
+      'How AcneLyze handles your personal information and facial photos.',
     sections: [
       {
         heading: 'What we store',
@@ -30,11 +30,11 @@ const content: Record<string, { icon: typeof FileText; title: string; intro: str
   terms: {
     icon: FileText,
     title: 'Terms of Service',
-    intro: 'The ground rules for using DermaLens.',
+    intro: 'The ground rules for using AcneLyze.',
     sections: [
       {
         heading: 'The service',
-        body: 'DermaLens provides AI-assisted skincare guidance: facial photo analysis, routine recommendations, beauty tips, diet suggestions and a skincare assistant chatbot.',
+        body: 'AcneLyze provides AI-assisted skincare guidance: facial photo analysis, routine recommendations, beauty tips, diet suggestions and a skincare assistant chatbot.',
       },
       {
         heading: 'Acceptable use',
@@ -53,11 +53,11 @@ const content: Record<string, { icon: typeof FileText; title: string; intro: str
   disclaimer: {
     icon: Stethoscope,
     title: 'Medical Disclaimer',
-    intro: 'What DermaLens is — and, importantly, what it is not.',
+    intro: 'What AcneLyze is — and, importantly, what it is not.',
     sections: [
       {
         heading: 'Not a medical device',
-        body: 'DermaLens does not diagnose, treat, cure or prevent any disease or skin condition. Output from the analysis feature is an automated, non-clinical observation of a photo, not a medical finding.',
+        body: 'AcneLyze does not diagnose, treat, cure or prevent any disease or skin condition. Output from the analysis feature is an automated, non-clinical observation of a photo, not a medical finding.',
       },
       {
         heading: 'No fabricated results',

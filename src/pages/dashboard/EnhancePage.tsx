@@ -80,7 +80,7 @@ export default function EnhancePage() {
     if (!enhancedUrl || !file) return;
     const a = document.createElement('a');
     a.href = enhancedUrl;
-    a.download = `dermalens-enhanced-${file.name.replace(/\.[^.]+$/, '')}.jpg`;
+    a.download = `acne lyze-enhanced-${file.name.replace(/\.[^.]+$/, '')}.jpg`;
     a.click();
   };
 
@@ -121,7 +121,7 @@ export default function EnhancePage() {
       <Card className="flex items-start gap-3 border-powder-200 bg-powder-50 p-5">
         <Info className="mt-0.5 h-5 w-5 shrink-0 text-navy-500" />
         <p className="text-sm leading-relaxed text-navy-600">
-          DermaLens enhancement applies gentle, identity-preserving corrections only — no
+          AcneLyze enhancement applies gentle, identity-preserving corrections only — no
           beauty filters, no skin smoothing and no changes to your facial features.
         </p>
       </Card>

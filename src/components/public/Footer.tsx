@@ -35,7 +35,7 @@ export default function Footer() {
           </p>
           <div className="mt-6 space-y-2.5 text-sm text-navy-200">
             <p className="flex items-center gap-2.5">
-              <Mail className="h-4 w-4" /> hello@dermalens.app
+              <Mail className="h-4 w-4" /> hello@acne lyze.app
             </p>
             <p className="flex items-center gap-2.5">
               <MapPin className="h-4 w-4" /> Built as a final-year capstone project
@@ -75,9 +75,9 @@ export default function Footer() {
 
       <div className="border-t border-navy-600">
         <div className="container-app flex flex-col items-center justify-between gap-2 py-5 text-xs text-navy-300 sm:flex-row">
-          <p>© {new Date().getFullYear()} DermaLens. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AcneLyze. All rights reserved.</p>
           <p>
-            DermaLens provides skincare guidance only and is not a medical device. It does
+            AcneLyze provides skincare guidance only and is not a medical device. It does
             not diagnose or treat any condition.
           </p>
         </div>

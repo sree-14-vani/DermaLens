@@ -55,7 +55,7 @@ export default function DashboardLayout() {
             <path d="M12 3c-4 0-8 3.6-8 9s4 9 8 9 8-3.6 8-9-4-9-8-9z" />
           </svg>
         </span>
-        <span className="font-serif text-lg font-semibold text-white">DermaLens</span>
+        <span className="font-serif text-lg font-semibold text-white">AcneLyze</span>
       </div>
 
       <nav className="thin-scroll flex-1 space-y-1 overflow-y-auto px-3 py-4">
@@ -109,7 +109,7 @@ export default function DashboardLayout() {
 
       {/* Mobile top bar */}
       <div className="sticky top-0 z-30 flex h-14 items-center justify-between bg-navy-700 px-4 lg:hidden">
-        <span className="font-serif text-lg font-semibold text-white">DermaLens</span>
+        <span className="font-serif text-lg font-semibold text-white">AcneLyze</span>
         <button
           onClick={() => setOpen(true)}
           className="rounded-lg p-2 text-white hover:bg-white/10"

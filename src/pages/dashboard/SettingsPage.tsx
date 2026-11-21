@@ -133,7 +133,7 @@ export default function SettingsPage() {
           <LogOut className="h-5 w-5 text-red-400" /> Account
         </h2>
         <p className="mt-2 text-sm text-navy-500">
-          Sign out of DermaLens on this device. Your data stays safe and private.
+          Sign out of AcneLyze on this device. Your data stays safe and private.
         </p>
         <Button variant="danger" className="mt-4" onClick={() => setLogoutOpen(true)}>
           <LogOut className="h-4 w-4" /> Log out
@@ -143,7 +143,7 @@ export default function SettingsPage() {
       <Card className="flex items-start gap-3 bg-mist p-5">
         <Info className="mt-0.5 h-5 w-5 shrink-0 text-navy-400" />
         <p className="text-sm leading-relaxed text-navy-500">
-          DermaLens provides skincare guidance only. It is not a medical device and does
+          AcneLyze provides skincare guidance only. It is not a medical device and does
           not diagnose or treat any condition.
         </p>
       </Card>

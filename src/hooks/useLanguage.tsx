@@ -17,7 +17,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   // Load saved language: profile first, then local fallback.
   useEffect(() => {
-    const saved = localStorage.getItem('dermalens-lang') as Language | null;
+    const saved = localStorage.getItem('acne lyze-lang') as Language | null;
     if (saved && languages.some((l) => l.value === saved)) setLangState(saved);
     if (!user) return;
     const load = async () => {
@@ -39,7 +39,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLang = (l: Language) => {
     setLangState(l);
-    localStorage.setItem('dermalens-lang', l);
+    localStorage.setItem('acne lyze-lang', l);
     if (user) {
       const persist = async () => {
         try {

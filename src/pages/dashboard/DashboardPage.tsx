@@ -327,7 +327,7 @@ export default function DashboardPage() {
         <p className="text-sm leading-relaxed text-amber-800">
           <span className="font-semibold">Demo mode:</span> the AI analysis model is not
           connected yet. Uploads are saved securely and results will appear here once the
-          model goes live — DermaLens never shows fabricated predictions.
+          model goes live — AcneLyze never shows fabricated predictions.
         </p>
       </Card>
     </div>

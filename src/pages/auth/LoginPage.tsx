@@ -47,7 +47,7 @@ export default function LoginPage() {
       subtitle="Sign in to view your analyses, routines and personalized guidance."
       footer={
         <>
-          New to DermaLens?{' '}
+          New to AcneLyze?{' '}
           <Link to="/register" className="font-semibold text-navy-700 hover:underline">
             Create an account
           </Link>
